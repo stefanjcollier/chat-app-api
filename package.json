@@ -1,0 +1,19 @@
+{
+  "name": "chat-app-api",
+  "version": "1.0.0",
+  "description": "a chat api to provide simple chat data to a react front end via sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanjcollier/chat-app-api.git"
+  },
+  "author": "joecridge, stefanjcollier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefanjcollier/chat-app-api/issues"
+  },
+  "homepage": "https://github.com/stefanjcollier/chat-app-api#readme"
+}
