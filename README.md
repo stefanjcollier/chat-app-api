@@ -1,33 +1,83 @@
 # chat-app-api
-A very simple NodeJS app that provides chat data, that currently only has 3 users by default,
+
+A very simple NodeJS app that provides initial chat data and WebSocket support.
 
 ## Installation
-After cloning the repo and entering the folder, run the following command
-```
+
+After cloning the repo and entering the folder, run the following command to
+install dependencies:
+
+```bash
 npm install
 ```
 
 ## Startup
+
 The following command will start the app on **http://localhost:8888**
-```
-node index.js
+
+```bash
+npm start
 ```
 
 ## Usage 
-#### /login/:username
-Login in as the given user (current users are: stefan, joe, rewaz). This will set a cookie so that all subsequent requests are from that user.
 
-#### /chats/
-Get a list of all the chats that user has between his buddies. The chats will only show the last message
+### Human-facing endpoints
 
-#### /chats/:buddy
-Get the entire conversation between the cookie-logged-in user and their buddy
+Log in as user `joe` (you should do this for the user you want before visiting
+the React app – it sets a cookie so that all subsequent requests are from that
+user):
 
-#### / 
-An endpoint to say who is logged in, this is user-friendly not data.
+* Visit <http://localhost:8888/login/joe> in your browser.
 
-#### *
-Any other endpoint will cause a 404 not found
+See the currently logged in user:
+
+* Visit <http://localhost:8888/> in your browser.
+
+### Machine-facing endpoints
+
+Get the list of chats for the currently logged in user:
+
+```
+GET /chats
+
+{
+  "chats": [
+    {
+      "buddy": "stefan",
+      "lastMessage": "Hey how are you?",
+      "timestamp": "2017-12-01T14:00:00.000Z"
+    },
+    {
+      "buddy": "rewaz",
+      "lastMessage": "I agree, react will take over the world one day.",
+      "timestamp": "2017-12-03T01:10:00.000Z"
+    }
+  ]
+}
+```
+
+Get the list of messages from the logged in user’s chat with `stefan`:
+
+```
+GET /chats/stefan/messages
+
+{
+  "messages": [
+    {
+      "body": "Hiya",
+      "sender": "stefan",
+      "timestamp": "2017-12-01T13:00:00.000Z"
+    },
+    {
+      "body": "Hey how are you?",
+      "sender": "joe",
+      "timestamp": "2017-12-01T14:00:00.000Z"
+    }
+  ]
+}
+```
 
 ## Debug
-Something weird happening? Check the command line, it will provide info on all requests the app recieved
+
+Something weird happening? Check the command line – it will provide info on all
+requests the app received.
