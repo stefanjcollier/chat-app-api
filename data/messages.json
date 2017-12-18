@@ -1,0 +1,32 @@
+[
+  {
+    "body": "Hiya",
+    "chat_id": 1,
+    "sender": "stefan",
+    "timestamp": "2017-12-01T13:00:00.000Z"
+  },
+  {
+    "body": "Hey how are you?",
+    "chat_id": 1,
+    "sender": "joe",
+    "timestamp": "2017-12-01T14:00:00.000Z"
+  },
+  {
+    "body":"Hey how are you finding the challenge?",
+    "chat_id": 2,
+    "sender": "joe",
+    "timestamp": "2017-12-02T08:10:00.000Z"
+  },
+  {
+    "body": "It is great, react js is rather nice.",
+    "chat_id": 2,
+    "sender": "rewaz",
+    "timestamp": "2017-12-02T08:30:00.000Z"
+  },
+  {
+    "body":"I agree, react will take over the world one day.",
+    "chat_id": 2,
+    "sender": "joe",
+    "timestamp": "2017-12-03T01:10:00.000Z"
+  }
+]
