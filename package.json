@@ -4,6 +4,7 @@
   "description": "a chat api to provide simple chat data to a react front end via sockets",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,9 @@
   "homepage": "https://github.com/stefanjcollier/chat-app-api#readme",
   "dependencies": {
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.2"
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "lodash": "^4.17.4",
+    "morgan": "^1.9.0"
   }
 }
