@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/stefanjcollier/chat-app-api/issues"
   },
-  "homepage": "https://github.com/stefanjcollier/chat-app-api#readme"
+  "homepage": "https://github.com/stefanjcollier/chat-app-api#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
