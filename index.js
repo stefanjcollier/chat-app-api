@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 
+// ======================[ Default Data ]===================================
 app.locals.chats = {
 	'stefan' : { 'joe':[
 			{
@@ -23,18 +24,54 @@ app.locals.chats = {
 		},
 	'joe'    : { 'stefan': [
 			{
-				'sender': 'stefan',
-				'timestamp': '2017-12-01T13:00:00Z',
-			},
-			{
 				'sender': 'joe',
 				'message': 'Hey how are you?',
 				'timestamp': '2017-12-01T14:00:00Z',
 			},
-			]  
+			{
+				'sender': 'stefan',
+				'message':'Hiya',
+				'timestamp': '2017-12-01T13:00:00Z',
+			},
+		   ], 
+		   'rewaz': [
+		    	{
+				'sender': 'joe',
+				'message':'Hey how are you finding the challenge?',
+				'timestamp': '2017-12-02T08:10:00Z',
+			},
+			{
+				'sender': 'rewaz',
+				'message': 'It is great, react js is rather nice.',
+				'timestamp': '2017-12-02T08:30:00Z',
+			},
+		    	{
+				'sender': 'joe',
+				'message':'I agree, react will take over the world one day.',
+				'timestamp': '2017-12-03T01:10:00Z',
+			},
+			
+		    ]
 		 },
-	'rewaz'  : {}
-
+	'rewaz'  : {  'joe': [
+		    	{
+				'sender': 'joe',
+				'message':'Hey how are you finding the challenge?',
+				'timestamp': '2017-12-02T08:10:00Z',
+			},
+			{
+				'sender': 'rewaz',
+				'message': 'It is great, react js is rather nice.',
+				'timestamp': '2017-12-02T08:30:00Z',
+			},
+		    	{
+				'sender': 'joe',
+				'message':'I agree, react will take over the world one day.',
+				'timestamp': '2017-12-03T01:10:00Z',
+			},
+			
+		    ]
+ 		}
 }
 
 /*
@@ -66,17 +103,50 @@ app.get('/login/:user', (req, res) => {
 })
 
 // ======================[ Chat Endpoints ]===================================
+
+function compare_on_timestamp(a,b) {
+  if (a.timestamp < b.timestamp)
+    return -1;
+  if (a.timestamp > b.timestamp)
+    return 1;
+  return 0;
+}
+
+
+
 /*
- * Get all the chats for a the user ':me'
+ * Get all the chats for a the logged in user, showing ONLY THE LATEST  message from each chat
  */
 app.get('/chats/', function(req,res) {
 	const me = req.cookies.user
-	var chats = app.locals.chats[me];
+	const chats = app.locals.chats[me];
+	let shallow_chats = {}
+
 	if ( ! chats) {
-		chats = {}
+		shallow_chats = {}
+	} else {
+		Object.keys(chats).forEach(function(buddy) {
+  			var chat = chats[buddy].sort(compare_on_timestamp);
+			shallow_chats[buddy] = chat[0]
+		});
+
 	}
-	log(req, JSON.stringify(Object.keys(chats)) )
-	res.send(chats)
+	log(req, JSON.stringify(Object.keys(shallow_chats)) )
+	res.send(shallow_chats)
+});
+
+/*
+ * Get the ENTIRE conversation between the logged in user and their :buddy
+ */
+app.get('/chats/:buddy', function(req,res) {
+	const me = req.cookies.user
+	const buddy = req.params.buddy
+	var chat = app.locals.chats[me][buddy];
+	if ( ! chat) {
+		chat = [] 
+	}
+	log(req, JSON.stringify("Messages:"+chat.length) )
+	res.send(chat)
 });
 
 
