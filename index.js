@@ -12,7 +12,10 @@ const server = http.Server(app)
 const io = socketIo(server)
 
 app.use(morgan('[:date] :method :url => :status (:response-time ms)'))
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: (o, cb) => cb(null, true)
+}))
 app.use(cookieParser())
 
 app.locals.chats = require('./data/chats.json')
