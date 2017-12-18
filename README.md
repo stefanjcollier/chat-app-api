@@ -37,8 +37,8 @@ See the currently logged in user:
 
 Get the list of chats for the currently logged in user:
 
-```
-GET /chats
+```javascript
+// GET /chats
 
 {
   "chats": [
@@ -58,8 +58,8 @@ GET /chats
 
 Get the list of messages from the logged in user’s chat with `stefan`:
 
-```
-GET /chats/stefan/messages
+```javascript
+// GET /chats/stefan/messages
 
 {
   "messages": [
@@ -75,6 +75,43 @@ GET /chats/stefan/messages
     }
   ]
 }
+```
+
+When something goes wrong:
+
+```javascript
+// GET /chats/stefaan/messages
+
+{
+  "error": "joe does not have a chat with stefaan"
+}
+```
+
+## WebSocket events
+
+Connecting to the server:
+
+```javascript
+const socket = io('http://localhost:8888')
+```
+
+Sending a new message:
+
+```javascript
+socket.emit('send', {
+  body: "How are things going?",
+  buddy: "stefan",  // Who you are sending the message to.
+})
+```
+
+Receiving a new message:
+
+```javascript
+socket.on('receive', (message) => {
+  console.log(message.body)  // => 'Not too bad thanks'
+  console.log(message.sender)  // => 'joe'
+  console.log(message.timestamp)  // => '2017-12-18T05:31:00.000Z'
+})
 ```
 
 ## Debug

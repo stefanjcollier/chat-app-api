@@ -1,10 +1,15 @@
 const _ = require('lodash')
+const cookie = require('cookie')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
+const socketIo = require('socket.io')
 
 const app = express()
+const server = http.Server(app)
+const io = socketIo(server)
 
 app.use(morgan('[:date] :method :url => :status (:response-time ms)'))
 app.use(cors())
@@ -79,6 +84,41 @@ app.get('/', (req, res) => {
   res.send(`Current user is ${req.cookies.user}`)
 })
 
-app.listen(8888, function () {
+// When a user connects, add them to 'their' room.
+io.on('connection', (socket) => {
+  const user = cookie.parse(socket.request.headers.cookie).user
+  socket.join(user)
+
+  // When the user sends a message, store it and send it to their buddy.
+  socket.on('send', (message) => {
+    const timestamp = (new Date()).toJSON()
+
+    const chat = _.chain(app.locals.chats)
+      .filter((c) => c.users.includes(message.buddy) && c.users.includes(user))
+      .first().value()
+
+    if (!chat) {
+      // Trying to message buddy they don't have a chat with. Do nothing.
+      return
+    }
+
+    // Save the message for future page loads.
+    app.locals.messages.push({
+      body: message.body,
+      chat_id: chat.id,
+      sender: user,
+      timestamp
+    })
+
+    // Push the message to the buddy (if they're connected).
+    io.to(message.buddy).emit('receive', {
+      body: message.body,
+      sender: user,
+      timestamp
+    })
+  })
+})
+
+server.listen(8888, function () {
   console.log('Chat server running on http://localhost:8888')
 })
